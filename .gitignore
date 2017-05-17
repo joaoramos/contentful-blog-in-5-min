@@ -12,3 +12,6 @@ dist
 
 # Contentful configs
 .contentful.js
+
+# data
+data
