@@ -1,5 +1,6 @@
 const ctfConfig = require('./plugins/contentful-client').config
-const client = require('./plugins/contentful-client').client
+const cdaClient = require('./plugins/contentful-client').cdaClient
+const cmaClient = require('./plugins/contentful-client').cmaClient
 
 const config = {
   /*
@@ -53,16 +54,22 @@ const config = {
   **
   ** Included:
   ** - blog posts
-  ** - available tags
+  ** - available blog post tags
   */
   generate: {
     routes () {
-      return client.getEntries({
-        'content_type': ctfConfig.CTF_BLOG_POST_TYPE_ID
-      }).then(entries => {
+      return Promise.all([
+        cdaClient.getEntries({
+          'content_type': ctfConfig.CTF_BLOG_POST_TYPE_ID
+        }),
+        cmaClient.getSpace(ctfConfig.CTF_SPACE_ID)
+          .then(space => space.getContentType(ctfConfig.CTF_BLOG_POST_TYPE_ID))
+      ])
+      .then(([entries, postType]) => {
+        console.log(postType.fields.find(field => field.id === 'tags').items)
         return [
           ...entries.items.map(entry => `blog/${entry.fields.slug}`),
-          ...ctfConfig.CTF_BLOG_POST_TAGS.map(tag => `tags/${tag}`)
+          ...postType.fields.find(field => field.id === 'tags').items.validations[0].in.map(tag => `tags/${tag}`)
         ]
       })
     }

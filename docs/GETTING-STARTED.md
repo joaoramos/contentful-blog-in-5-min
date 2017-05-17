@@ -55,18 +55,19 @@ Now that you have the Contentful setup done, it's time to define the configurati
 
 Needed config data:
 - the ID of the space where your data lives - `CTF_SPACE_ID`
-- the Content Delivery API token so that you can fetch the data - `CTF_ACCESS_TOKEN`
+- the Content Delivery API token so that you can fetch the data - `CTF_CDA_ACCESS_TOKEN`
+- the Content Management API token so that you can fetch the valid tags - `CTF_CMA_ACCESS_TOKEN`
 
 ```javascript
 module.exports = {
-  // doesn't need to be changes - was set in your import
+  // these values are already correct
   CTF_PERSON_ID: '15jwOBqpxqSAOy2eOO4S0m',
   CTF_BLOG_POST_TYPE_ID: 'blogPost',
-  CTF_BLOG_POST_TAGS: ['javascript', 'general', 'static sites'],
 
   // these values have to be defined by you
   CTF_SPACE_ID: 'YOUR_SPACE_ID',
-  CTF_ACCESS_TOKEN: 'YOUR_DELIVERY_ACCESS_TOKEN'
+  CTF_CDA_ACCESS_TOKEN: 'YOUR_DELIVERY_ACCESS_TOKEN',
+  CTF_CMA_ACCESS_TOKEN: 'YOUR_MANAGEMENT_ACCESS_TOKEN'
 };
 ```
 

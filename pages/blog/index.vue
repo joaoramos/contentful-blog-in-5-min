@@ -28,12 +28,12 @@
 </template>
 
 <script>
-import {client} from '../../plugins/contentful-client.js'
+import {cdaClient} from '../../plugins/contentful-client.js'
 import Navigation from '~components/navigation.vue'
 
 export default {
   asyncData ({ params }) {
-    return client.getEntries({
+    return cdaClient.getEntries({
       'content_type': process.env.CTF_BLOG_POST_TYPE_ID,
       order: '-sys.createdAt'
     }).then(entries => {

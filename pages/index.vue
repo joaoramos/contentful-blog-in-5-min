@@ -44,37 +44,24 @@
 
     <div class="row">
       <div class="small-12 large-4 columns" v-for="post in posts">
-        <img class="thumbnail"
-          :src="post.fields.heroImage.fields.file.url + '?fit=scale&w=350&h=196'"
-          :srcset="`${post.fields.heroImage.fields.file.url}?w=350&h=196&fit=fill 350w, ${post.fields.heroImage.fields.file.url}?w=1000&h=562&fit=fill 1000w, ${post.fields.heroImage.fields.file.url}?w=2000&h=1125&fit=fill 2000w`"
-          sizes="(min-width: 1024px) 400px, 100vw"
-        >
-        <time>{{ ( new Date(post.fields.publishDate)).toDateString() }}</time>
-        <h4><nuxt-link :to="{ name: 'blog-slug', params: { slug: post.fields.slug }}">{{ post.fields.title }}</nuxt-link></h4>
-        <p>{{ post.fields.description }}</p>
-
-        <div class="tags">
-          <nuxt-link
-            v-for="tag in post.fields.tags"
-            :key="tag"
-            :to="{ name: 'tags-tag', params: { tag: tag }}" class="tag">{{ tag }}</nuxt-link>
-        </div>
+        <article-preview :post="post"></article-preview>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {client} from '../plugins/contentful-client.js'
+import {cdaClient} from '../plugins/contentful-client.js'
 import Navigation from '~components/navigation.vue'
+import ArticlePreview from '~components/article-preview.vue'
 
 export default {
   asyncData ({ params }) {
     return Promise.all([
-      client.getEntries({
+      cdaClient.getEntries({
         'sys.id': process.env.CTF_PERSON_ID
       }),
-      client.getEntries({
+      cdaClient.getEntries({
         'content_type': process.env.CTF_BLOG_POST_TYPE_ID,
         order: '-sys.createdAt'
       })
@@ -86,7 +73,8 @@ export default {
     }).catch(console.error)
   },
   components: {
-    Navigation
+    Navigation,
+    ArticlePreview
   }
 }
 </script>
